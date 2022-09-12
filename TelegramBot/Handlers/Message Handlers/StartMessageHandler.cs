@@ -16,29 +16,34 @@ namespace TelegramBot.Handlers.Message_Handlers
             var message = update.Message;
             if (message != null && message.Text == "/start")
             {
-                using(UserContext userContext = new UserContext())
+                Models.User user;
+
+                if (UserExists(message, out user))
+                    await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
+
+                else
                 {
-                    var user = userContext.Users
-                                          .Where(u => u.Username == message.From.Username)
-                                          .FirstOrDefault();
-
-                    if (user != null)
-                        await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
-
-                    else
-                    {
-                        await botClient.SendTextMessageAsync(message.Chat, "Введите имя группы");
-                        return;                 
-                    }
-                        
+                    await botClient.SendTextMessageAsync(message.Chat, "Введите имя группы");
                 }
-                
+
             }
             else if (Successor != null)
             {
                 Successor.HandleRequestAsync(update, botClient);
             }
                 
+        }
+
+        public bool UserExists(Message message, out Models.User user)
+        {
+            using (UserContext userContext = new UserContext())
+            {
+                user = userContext.Users
+                                  .Where(u => u.Username == message.From.Username)
+                                  .FirstOrDefault();
+            }
+
+            return user != null;
         }
     }
 }

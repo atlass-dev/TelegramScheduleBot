@@ -13,8 +13,7 @@ namespace TelegramBot.Handlers.Message_Handlers
     {
         public override async Task HandleRequestAsync(Update update, ITelegramBotClient botClient)
         {
-            var message = update.Message;
-
+            var message = update.Message;         
             if (message.Text == "ИВТ-20-1")
             {
                 using (UserContext context = new UserContext())
