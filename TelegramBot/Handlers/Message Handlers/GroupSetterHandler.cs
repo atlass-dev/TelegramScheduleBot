@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScheduleParsing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace TelegramBot.Handlers.Message_Handlers
                 {
                     context.Add(new Models.User() { Username = message.From.Username, Group = message.Text });
                     context.SaveChangesAsync();
-                    await botClient.SendTextMessageAsync(message.Chat, "Вы успешно зарегистрировались!");                    
+                    await botClient.SendTextMessageAsync(message.Chat, "Вы успешно зарегистрировались!");
                 }
             }
 
@@ -31,6 +32,6 @@ namespace TelegramBot.Handlers.Message_Handlers
         private bool GroupExists(string name)
         {
             return true;
-        }
+        }     
     }
 }

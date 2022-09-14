@@ -22,10 +22,12 @@ namespace TelegramBot
                 
                 Handler startMessageHandler = new StartMessageHandler();
                 Handler defaultMessageHandler = new DefaultMessageHandler();
-                Handler GroupSetterHandler = new GroupSetterHandler();
+                Handler groupSetterHandler = new GroupSetterHandler();
+                Handler showScheduleHandler = new ShowScheduleHandler();
 
-                startMessageHandler.Successor = GroupSetterHandler;
-                GroupSetterHandler.Successor = defaultMessageHandler;
+                startMessageHandler.Successor = groupSetterHandler;
+                groupSetterHandler.Successor = showScheduleHandler;
+                showScheduleHandler.Successor = defaultMessageHandler;
                 startMessageHandler.HandleRequestAsync(update, botClient);
             }
         }

@@ -18,7 +18,7 @@ namespace TelegramBot.Handlers.Message_Handlers
             {
                 Models.User user;
 
-                if (UserExists(message, out user))
+                if (DBChecker.UserExists(message, out user))
                     await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
 
                 else
@@ -32,18 +32,6 @@ namespace TelegramBot.Handlers.Message_Handlers
                 Successor.HandleRequestAsync(update, botClient);
             }
                 
-        }
-
-        public bool UserExists(Message message, out Models.User user)
-        {
-            using (UserContext userContext = new UserContext())
-            {
-                user = userContext.Users
-                                  .Where(u => u.Username == message.From.Username)
-                                  .FirstOrDefault();
-            }
-
-            return user != null;
-        }
+        }    
     }
 }
