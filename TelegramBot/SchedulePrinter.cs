@@ -22,10 +22,19 @@ namespace TelegramBot
                 response += new string('-', 30) + "\n" + $"Дата: {item.date}, День недели: {item.weekDay}"
                     + "\n" + "Список занятий: \n\n";
 
+                if (item.pairs.Count == 0)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "В этот день нет занятий \n\n");
+                    continue;
+                }
+
                 foreach (var pair in item.pairs)
                 {
                     if (pair.schedulePairs.Count == 0)
+                    {
                         continue;
+                    }
+                        
                     response += $"Номер занятия: {pair.N}, время: {pair.time} \n\n";
                     foreach (var schedulePair in pair.schedulePairs)
                         response += $"{schedulePair.subject}  -  {schedulePair.teacher}  -  {schedulePair.aud} \n\n";
