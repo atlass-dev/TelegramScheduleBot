@@ -16,7 +16,7 @@ namespace TelegramBot.Handlers.Message_Handlers
             Models.User user;
             if (message.Text == "/завтра")
             {
-                if (!DBChecker.UserExists(message, out user))
+                if (!DBManager.UserExists(message, out user))
                 {
                     await botClient.SendTextMessageAsync(message.Chat, "Вы не зарегистрированы!");
                     return;

@@ -15,19 +15,20 @@ namespace TelegramBot
     {
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Console.WriteLine(JsonSerializer.Serialize(update));
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 var message = update.Message;
                 
                 Handler startMessageHandler = new StartMessageHandler();
                 Handler defaultMessageHandler = new DefaultMessageHandler();
-                Handler groupSetterHandler = new GroupSetterHandler();
                 Handler showScheduleHandler = new ShowScheduleHandler();
+                Handler groupChangerRequestHandler = new GroupChangeRequestHandler();
+                Handler groupChangeHandler = new GroupChangeHandler();
 
-                startMessageHandler.Successor = groupSetterHandler;
-                groupSetterHandler.Successor = showScheduleHandler;
-                showScheduleHandler.Successor = defaultMessageHandler;
+                startMessageHandler.Successor = showScheduleHandler;
+                showScheduleHandler.Successor = groupChangerRequestHandler;
+                groupChangerRequestHandler.Successor = groupChangeHandler;
+                groupChangeHandler.Successor = defaultMessageHandler;
                 startMessageHandler.HandleRequestAsync(update, botClient);
             }
         }

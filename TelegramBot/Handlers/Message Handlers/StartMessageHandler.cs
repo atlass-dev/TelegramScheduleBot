@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramBot.Models;
 
 namespace TelegramBot.Handlers.Message_Handlers
@@ -14,16 +15,17 @@ namespace TelegramBot.Handlers.Message_Handlers
         public override async Task HandleRequestAsync(Update update, ITelegramBotClient botClient)
         {
             var message = update.Message;
-            if (message != null && message.Text == "/start")
+            if (message.Text == "/start")
             {
                 Models.User user;
 
-                if (DBChecker.UserExists(message, out user))
+                if (DBManager.UserExists(message, out user))
                     await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
 
                 else
                 {
-                    await botClient.SendTextMessageAsync(message.Chat, "Введите имя группы");
+                    await botClient.SendTextMessageAsync(message.Chat, "Для регистрации введите название группы"
+                        , null, null, null, null, null, null, null, replyMarkup: new ForceReplyMarkup { Selective = true });
                 }
 
             }
