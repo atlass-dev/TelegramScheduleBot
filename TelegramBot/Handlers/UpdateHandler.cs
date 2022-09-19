@@ -13,17 +13,18 @@ namespace TelegramBot
 {
     internal class UpdateHandler : IUpdateHandler
     {
+        private Dictionary<string, State> dialogs = new();
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 var message = update.Message;
                 
-                Handler startMessageHandler = new StartMessageHandler();
-                Handler defaultMessageHandler = new DefaultMessageHandler();
-                Handler showScheduleHandler = new ShowScheduleHandler();
-                Handler groupChangerRequestHandler = new GroupChangeRequestHandler();
-                Handler groupChangeHandler = new GroupChangeHandler();
+                Handler startMessageHandler = new StartMessageHandler(dialogs);
+                Handler defaultMessageHandler = new DefaultMessageHandler(dialogs);
+                Handler showScheduleHandler = new ShowScheduleHandler(dialogs);
+                Handler groupChangerRequestHandler = new GroupChangeRequestHandler(dialogs);
+                Handler groupChangeHandler = new GroupChangeHandler(dialogs);
 
                 startMessageHandler.Successor = showScheduleHandler;
                 showScheduleHandler.Successor = groupChangerRequestHandler;
@@ -37,5 +38,14 @@ namespace TelegramBot
         {
             Console.WriteLine(JsonSerializer.Serialize(exception));
         }
+    }
+
+    public enum State
+    {
+        Start,
+        Registered,
+        GroupChange,
+        TomorrowSchedule,
+        DateSchedule
     }
 }

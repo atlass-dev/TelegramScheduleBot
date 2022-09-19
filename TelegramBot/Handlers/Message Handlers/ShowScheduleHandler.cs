@@ -10,6 +10,10 @@ namespace TelegramBot.Handlers.Message_Handlers
 {
     internal class ShowScheduleHandler : Handler
     {
+        public ShowScheduleHandler(Dictionary<string, State> dialogs) : base(dialogs)
+        {
+        }
+
         public override async Task HandleRequestAsync(Update update, ITelegramBotClient botClient)
         {
             var message = update.Message;

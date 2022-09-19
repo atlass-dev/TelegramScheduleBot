@@ -10,24 +10,23 @@ namespace TelegramBot.Handlers.Message_Handlers
 {
     internal class GroupChangeHandler : Handler
     {
+        public GroupChangeHandler(Dictionary<string, State> dialogs) : base(dialogs)
+        {
+        }
+
         public override async Task HandleRequestAsync(Update update, ITelegramBotClient botClient)
         {
             var message = update.Message;
 
-            if (message.ReplyToMessage != null && message.ReplyToMessage.Text == "Для регистрации введите название группы")
+            var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
+
+            if (dialogs[dialogId] == State.Start)
             {
-                try
-                {
-                    DBManager.AddUser(message);
-                    await botClient.SendTextMessageAsync(message.Chat, "Вы успешно зарегистрировались!");
-                }
-                catch (Exception ex)
-                {
-                    await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
-                }
+                DBManager.AddUser(message);
+                await botClient.SendTextMessageAsync(message.Chat, "Вы успешно зарегистрировались!");
             }
 
-            if (message.ReplyToMessage != null && message.ReplyToMessage.Text == "Введите новое название группы")
+            if (dialogs[dialogId] == State.GroupChange)
             {
                 try
                 {
@@ -37,10 +36,6 @@ namespace TelegramBot.Handlers.Message_Handlers
                 catch(ArgumentException ex)
                 {
                     await botClient.SendTextMessageAsync(message.Chat, "Такой группы не существует");
-                }
-                catch(Exception ex)
-                {
-                    await botClient.SendTextMessageAsync(message.Chat, "Вы не зарегистрированы!");
                 }
             }
         }
