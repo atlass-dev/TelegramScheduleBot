@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
-using TelegramBot.Models;
 
 namespace TelegramBot.Handlers.Message_Handlers
 {
-    internal class StartMessageHandler : Handler
+    internal class DateReceiveHandler : Handler
     {
-        public StartMessageHandler(Dictionary<string, State> dialogs) : base(dialogs)
+        public DateReceiveHandler(Dictionary<string, State> dialogs) : base(dialogs)
         {
         }
 
@@ -22,21 +20,17 @@ namespace TelegramBot.Handlers.Message_Handlers
 
             var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
 
-            if (message.Text == "/start")
+            if (dialogs[dialogId] == State.DateRequested)
             {
-                if (!DBManager.UserExists(message, out var user))
-                {
-                    await botClient.SendTextMessageAsync(message.Chat, "Для регистрации введите название группы");
+                string[] dates = message.Text.Split('-');
 
-                    dialogs[dialogId] = State.Start;
-                }
+                SchedulePrinter.ShowSchedule(DBManager.GetUser(message).Group, dates[0], dates[1], update, botClient);
 
+                return;
             }
+
             else if (Successor != null)
-            {
                 Successor.HandleRequestAsync(update, botClient);
-            }
-                
-        }    
+        }
     }
 }

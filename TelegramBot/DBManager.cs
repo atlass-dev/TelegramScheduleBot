@@ -75,5 +75,12 @@ namespace TelegramBot
 
             return user != null;
         }
+
+        public static Models.User GetUser(Message message)
+        {
+            if (message != null && UserExists(message, out var user))
+                return user;
+            return null;
+        }
     }
 }

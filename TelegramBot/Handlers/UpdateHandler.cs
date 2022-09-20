@@ -24,12 +24,16 @@ namespace TelegramBot
                 Handler defaultMessageHandler = new DefaultMessageHandler(dialogs);
                 Handler showScheduleHandler = new ShowScheduleHandler(dialogs);
                 Handler groupChangerRequestHandler = new GroupChangeRequestHandler(dialogs);
-                Handler groupChangeHandler = new GroupChangeHandler(dialogs);
+                Handler groupChangerHandler = new GroupChangerHandler(dialogs);
+                Handler dateScheduleHandler = new DateScheduleHandler(dialogs);
+                Handler dateReceiveHandler = new DateReceiveHandler(dialogs);
 
                 startMessageHandler.Successor = showScheduleHandler;
                 showScheduleHandler.Successor = groupChangerRequestHandler;
-                groupChangerRequestHandler.Successor = groupChangeHandler;
-                groupChangeHandler.Successor = defaultMessageHandler;
+                groupChangerRequestHandler.Successor = groupChangerHandler;
+                groupChangerHandler.Successor = dateScheduleHandler;
+                dateScheduleHandler.Successor = dateReceiveHandler;
+                dateReceiveHandler.Successor = defaultMessageHandler;
                 startMessageHandler.HandleRequestAsync(update, botClient);
             }
         }
@@ -46,6 +50,6 @@ namespace TelegramBot
         Registered,
         GroupChange,
         TomorrowSchedule,
-        DateSchedule
+        DateRequested,
     }
 }

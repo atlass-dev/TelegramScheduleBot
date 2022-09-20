@@ -17,6 +17,9 @@ namespace TelegramBot.Handlers.Message_Handlers
         public override async Task HandleRequestAsync(Update update, ITelegramBotClient botClient)
         {
             var message = update.Message;
+
+            var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
+
             Models.User user;
             if (message.Text == "/завтра")
             {
@@ -30,6 +33,7 @@ namespace TelegramBot.Handlers.Message_Handlers
                 {
                     string tomorrowDate = GetTomorrowDate();
                     SchedulePrinter.ShowSchedule(user.Group, tomorrowDate, tomorrowDate, update, botClient);
+                    dialogs[dialogId] = State.TomorrowSchedule;
                 }
             }
 

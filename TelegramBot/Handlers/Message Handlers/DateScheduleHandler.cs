@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
-using TelegramBot.Models;
 
 namespace TelegramBot.Handlers.Message_Handlers
 {
-    internal class StartMessageHandler : Handler
+    internal class DateScheduleHandler : Handler
     {
-        public StartMessageHandler(Dictionary<string, State> dialogs) : base(dialogs)
+        public DateScheduleHandler(Dictionary<string, State> dialogs) : base(dialogs)
         {
         }
 
@@ -22,21 +20,19 @@ namespace TelegramBot.Handlers.Message_Handlers
 
             var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
 
-            if (message.Text == "/start")
+            if (message.Text == "/расписание")
             {
                 if (!DBManager.UserExists(message, out var user))
+                    await botClient.SendTextMessageAsync(message.Chat, "Вы не зарегистрированы");
+                else
                 {
-                    await botClient.SendTextMessageAsync(message.Chat, "Для регистрации введите название группы");
-
-                    dialogs[dialogId] = State.Start;
-                }
-
+                    dialogs[dialogId] = State.DateRequested;
+                    await botClient.SendTextMessageAsync(message.Chat, "Введите дату промежуток в формате\n \"dd.mm.yyyy-dd.mm.yyyy\"");
+                }                    
             }
+
             else if (Successor != null)
-            {
                 Successor.HandleRequestAsync(update, botClient);
-            }
-                
-        }    
+        }
     }
 }
