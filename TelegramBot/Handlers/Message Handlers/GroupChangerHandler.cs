@@ -32,6 +32,7 @@ namespace TelegramBot.Handlers.Message_Handlers
                 {
                     DBManager.ChangeGroup(message);
                     await botClient.SendTextMessageAsync(message.Chat, "Вы успешно изменили учебную группу!");
+                    dialogs[dialogId] = State.None;
                 }
                 catch (ArgumentException ex)
                 {

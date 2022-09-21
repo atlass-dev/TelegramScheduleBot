@@ -51,5 +51,6 @@ namespace TelegramBot
         GroupChange,
         TomorrowSchedule,
         DateRequested,
+        None
     }
 }

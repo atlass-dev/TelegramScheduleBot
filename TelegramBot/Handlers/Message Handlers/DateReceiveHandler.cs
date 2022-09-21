@@ -26,6 +26,8 @@ namespace TelegramBot.Handlers.Message_Handlers
 
                 SchedulePrinter.ShowSchedule(DBManager.GetUser(message).Group, dates[0], dates[1], update, botClient);
 
+                dialogs[dialogId] = State.None;
+
                 return;
             }
 

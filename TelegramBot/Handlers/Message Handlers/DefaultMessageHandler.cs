@@ -18,7 +18,9 @@ namespace TelegramBot.Handlers.Message_Handlers
         {
             var message = update.Message;
 
-            if (message != null)
+            var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
+
+            if (message != null && dialogs[dialogId] == State.None)
             {
                 await botClient.SendTextMessageAsync(message.Chat, "Я твоя не понимать!");
                 return;
