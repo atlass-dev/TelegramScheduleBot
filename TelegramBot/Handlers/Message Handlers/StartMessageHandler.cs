@@ -31,6 +31,9 @@ namespace TelegramBot.Handlers.Message_Handlers
                     dialogs[dialogId] = State.Start;
                 }
 
+                else
+                    await botClient.SendTextMessageAsync(message.Chat, "Вы уже зарегистрированы!");
+
             }
             else if (Successor != null)
             {

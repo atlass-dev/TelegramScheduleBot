@@ -24,16 +24,14 @@ namespace TelegramBot.Handlers.Message_Handlers
 
             if (message.Text == "/сменитьгруппу") 
             {
-                if (dialogs.ContainsKey(dialogId))
+                if (DBManager.UserExists(message, out var user))
                 {
                     await botClient.SendTextMessageAsync(message.Chat, "Введите новое название группы");
                     dialogs[dialogId] = State.GroupChange;
                 }
 
                 else
-                {
                     await botClient.SendTextMessageAsync(message.Chat, "Вы не зарегистрированы!");
-                }
                 
             }
 

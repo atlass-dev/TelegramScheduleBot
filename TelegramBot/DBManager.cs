@@ -9,6 +9,15 @@ namespace TelegramBot
 {
     internal static class DBManager
     {
+        private static List<string> groups = new List<string>()
+        {
+            "ИВТ-20-1",
+            "ИВТ-20-2",
+            "ПИЭ-20-1",
+            "ПИЭ-20-2",
+            "ПИЭ-20-3",
+            "АИС-20-1",
+        };
         public static void AddUser(Message message)
         {
             Models.User user;
@@ -46,23 +55,16 @@ namespace TelegramBot
                     }
 
                     else
-                    {
                         throw new ArgumentException("Group doesn`t exist");
-                    }
                     
                 }
 
                 else
-                {
                     throw new Exception("User`s not registered");
-                }
             }
         }
 
-        private static bool GroupExists(string text)
-        {
-            return true;
-        }
+        private static bool GroupExists(string text) => groups.Contains(text);
 
         public static bool UserExists(Message message, out Models.User user)
         {

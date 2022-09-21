@@ -20,24 +20,24 @@ namespace TelegramBot.Handlers.Message_Handlers
 
             var dialogId = $"{update.Message.Chat.Id}_{update.Message.From.Id}";
 
-            if (dialogs.ContainsKey(dialogId) && dialogs[dialogId] == State.Start)
+            if (dialogs[dialogId] == State.Start)
             {
                 DBManager.AddUser(message);
                 await botClient.SendTextMessageAsync(message.Chat, "Вы успешно зарегистрировались!");
             }
 
-             if (dialogs.ContainsKey(dialogId) && dialogs[dialogId] == State.GroupChange)
-             {
-                 try
-                 {
-                     DBManager.ChangeGroup(message);
-                     await botClient.SendTextMessageAsync(message.Chat, "Вы успешно изменили учебную группу!");
-                 }
-                 catch (ArgumentException ex)
-                 {
-                     await botClient.SendTextMessageAsync(message.Chat, "Такой группы не существует");
-                 }
-             }
+            if (dialogs[dialogId] == State.GroupChange)
+            {
+                try
+                {
+                    DBManager.ChangeGroup(message);
+                    await botClient.SendTextMessageAsync(message.Chat, "Вы успешно изменили учебную группу!");
+                }
+                catch (ArgumentException ex)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Такой группы не существует");
+                }
+            }
 
             else if (Successor != null)
                 Successor.HandleRequestAsync(update, botClient);
